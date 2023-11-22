@@ -7,7 +7,7 @@ sudo apt-get -qq update
 sudo apt-get -qq upgrade
 
 echo "==3== Instalamos las dependencia para usar PostgreSQL con Python/Django: === "
-sudo apt-get -qq install build-essential libpq-dev python-dev
+sudo apt-get -qq install build-essential libpq-dev python3-dev
 
 echo "==4== Instalamos PostgreSQL Server: === "
 sudo apt-get -qq install postgresql postgresql-contrib
@@ -23,7 +23,8 @@ sudo systemctl enable supervisor
 sudo systemctl start supervisor
 
 echo "==8== Instalamos python-virtualenv: === "
-sudo apt-get -qq install python-virtualenv
+#sudo apt-get -qq install python-virtualenv
+sudo apt install python3-venv 
 
 echo "==9== Configuramos PostgreSQL: === "
 sudo su - postgres -c "createuser -s django"
@@ -35,7 +36,8 @@ sudo adduser --system --quiet --shell=/bin/bash --home=/home/django --gecos 'dja
 gpasswd -a django sudo
 
 echo "==10== Creamos el entorno virtual === "
-virtualenv /home/django/.venv --python=python3
+#virtualenv /home/django/.venv --python=python3
+python3 -m venv /home/django/.venv
 source /home/django/.venv/bin/activate
 
 echo "==11== Creamos el entorno virtual === "
@@ -43,12 +45,17 @@ pip install -q Django
 
 echo "==12== Clonamos el proyecto === "
 read -p 'Indique la dirección del repo a clonar (https://github.com/falconsoft3d/django-father): ' gitrepo
-git -C /home/django clone $gitrepo
+#git -C /home/django clone $gitrepo
+git -C /home/django clone https://github.com/Roscow/portafolio.git
 read -p 'Indique la el nombre de la carpeta del proyecto (django-father): ' project
 read -p 'Indique el nombre de la app principal de Django (father): ' djapp
 
 echo "==13== Instalamos las dependencias === "
 pip install -q -r /home/django/$project/requirements.txt
+pip install pillow
+pip install psycopg2-binary
+pip install python-dotenv
+
 
 echo "==14== Instalamos Gunicorn === "
 pip install -q gunicorn
