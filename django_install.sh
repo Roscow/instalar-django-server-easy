@@ -26,11 +26,6 @@ echo "==8== Instalamos python-virtualenv: === "
 #sudo apt-get -qq install python-virtualenv
 sudo apt install python3-venv 
 
-echo "==9== Configuramos PostgreSQL: === "
-sudo su - postgres -c "createuser -s django"
-sudo su - postgres -c "createdb django_prod --owner django"
-sudo -u postgres psql -c "ALTER USER django WITH PASSWORD 'django'"
-
 # Creamos el usuario del sistema
 sudo adduser --system --quiet --shell=/bin/bash --home=/home/django --gecos 'django' --group django
 gpasswd -a django sudo
@@ -52,10 +47,6 @@ read -p 'Indique el nombre de la app principal de Django (father): ' djapp
 
 echo "==13== Instalamos las dependencias === "
 pip install -q -r /home/django/$project/requirements.txt
-pip install pillow
-pip install psycopg2-binary
-pip install python-dotenv
-
 
 echo "==14== Instalamos Gunicorn === "
 pip install -q gunicorn
@@ -141,10 +132,6 @@ echo '      proxy_redirect off;' >> /etc/nginx/sites-available/django_app
 echo '      proxy_pass http://django_app;' >> /etc/nginx/sites-available/django_app
 echo '    }' >> /etc/nginx/sites-available/django_app
 echo '}' >> /etc/nginx/sites-available/django_app
-# Le metemos la IP al settings al final
-echo 'from .settings import ALLOWED_HOSTS' >> /home/django/$project/$djapp/localsettings.py
-echo 'ALLOWED_HOSTS += ["'$serverip'"]' >> /home/django/$project/$djapp/localsettings.py
-echo 'STATIC_ROOT = "/home/django/static/"' >> /home/django/$project/$djapp/localsettings.py
 
 sudo ln -s /etc/nginx/sites-available/django_app /etc/nginx/sites-enabled/django_app
 sudo rm /etc/nginx/sites-enabled/default
