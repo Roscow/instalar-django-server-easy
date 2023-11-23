@@ -45,6 +45,9 @@ git -C /home/django clone https://github.com/Roscow/portafolio.git
 read -p 'Indique la el nombre de la carpeta del proyecto (django-father): ' project
 read -p 'Indique el nombre de la app principal de Django (father): ' djapp
 
+echo "12.2 == COPIAR ARCHIVO .ENV"
+cp /home/.env /$project/.env
+
 echo "==13== Instalamos las dependencias === "
 pip install -q -r /home/django/$project/requirements.txt
 
